@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>360全景</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --perspective-distance: 600px;
+      --cube-size: 1000px;
+      --cube-z-distance: var(--perspective-distance);
+      --cube-item-z-distance: calc(var(--cube-size) / 2 - 1px);
+    }
+
+    .scene {
+      perspective: var(--perspective-distance);
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+    }
+
+    .cube-z {
+      width: 100%;
+      height: 100%;
+      transform-style: preserve-3d;
+      transform: translateZ(var(--cube-z-distance));
+    }
+
+    .cube {
+      position: relative;
+      transform-style: preserve-3d;
+      left: 50%;
+      top: 50%;
+      width: var(--cube-size);
+      height: var(--cube-size);
+      margin-left: calc(-1 * var(--cube-size) / 2);
+      margin-top: calc(-1 * var(--cube-size) / 2);
+    }
+
+    .cube-item {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background-size: 100% 100%;
+    }
+
+    .cube-item-pz {
+      transform: rotateY(0deg) translateZ(var(--cube-item-z-distance));
+      transform: rotateY(-0deg) translateZ(calc(-1 * var(--cube-item-z-distance)));
+    }
+
+    .cube-item-px {
+      transform: rotateY(90deg) translateZ(var(--cube-item-z-distance));
+      transform: rotateY(-90deg) translateZ(calc(-1 * var(--cube-item-z-distance)));
+    }
+
+    .cube-item-nz {
+      transform: rotateY(180deg) translateZ(var(--cube-item-z-distance));
+      transform: rotateY(-180deg) translateZ(calc(-1 * var(--cube-item-z-distance)));
+    }
+
+    .cube-item-nx {
+      transform: rotateY(-90deg) translateZ(var(--cube-item-z-distance));
+      transform: rotateY(90deg) translateZ(calc(-1 * var(--cube-item-z-distance)));
+    }
+
+    .cube-item-py {
+      transform: rotateX(90deg) translateZ(var(--cube-item-z-distance));
+      transform: rotateX(-90deg) translateZ(calc(-1 * var(--cube-item-z-distance)));
+    }
+
+    .cube-item-ny {
+      transform: rotateX(-90deg) translateZ(var(--cube-item-z-distance));
+      transform: rotateX(90deg) translateZ(calc(-1 * var(--cube-item-z-distance)));
+    }
+
+    .zoom {
+      background: rgba(255, 255, 255, .5);
+      position: fixed;
+      bottom: 2.5em;
+      right: 2.5em;
+      border-radius: 10%;
+      display: flex;
+      flex-direction: column;
+      width: 2.5em;
+      padding: 0.1em;
+    }
+
+    .zoom-plus,
+    .zoom-minus {
+      width: 100%;
+      height: 100%;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="scene">
+    <div class="cube-z">
+      <div class="cube">
+        <div class="cube-item cube-item-pz" style="background-image: url(./images/pz.png);"></div>
+        <div class="cube-item cube-item-nz" style="background-image: url(./images/nz.png);"></div>
+        <div class="cube-item cube-item-px" style="background-image: url(./images/px.png);"></div>
+        <div class="cube-item cube-item-nx" style="background-image: url(./images/nx.png);"></div>
+        <div class="cube-item cube-item-py" style="background-image: url(./images/py.png);"></div>
+        <div class="cube-item cube-item-ny" style="background-image: url(./images/ny.png);"></div>
+      </div>
+    </div>
+  </div>
+  <div class="zoom">
+    <img class="zoom-plus" src="./images/plus.svg" />
+    <img class="zoom-minus" src="./images/minus.svg" />
+  </div>
+
+  <script>
+    const cubeEl = document.querySelector('.cube');
+    const prePos = { x: 0, y: 0, styleX: 0, styleY: 0 };
+
+    window.addEventListener('mousedown', start);
+    window.addEventListener('touchstart', start);
+    window.addEventListener('touchmove', move);
+    window.addEventListener('mouseup', () => {
+      window.removeEventListener('mousemove', move);
+    });
+
+    document.querySelector('.zoom').addEventListener('click', ({ target }) => {
+      const cubeZEl = document.querySelector('.cube-z');
+      const perspectiveDistance = parseInt(getComputedStyle(cubeZEl).getPropertyValue('--perspective-distance'))
+      const cubeSize = parseInt(getComputedStyle(cubeZEl).getPropertyValue('--cube-size'))
+      const cubeZDistance = parseInt(getComputedStyle(cubeZEl).getPropertyValue('--cube-z-distance'))
+
+      if (target.classList.contains('zoom-plus')) {
+        cubeZEl.style.setProperty('--cube-z-distance', Math.min(perspectiveDistance + cubeSize / 2 - 1, cubeZDistance + cubeSize / 2 / 10) + 'px')
+
+      } else if (target.classList.contains('zoom-minus')) {
+        cubeZEl.style.setProperty('--cube-z-distance', Math.max(perspectiveDistance - cubeSize / 2 + 1, cubeZDistance - cubeSize / 2 / 10) + 'px')
+      }
+    })
+
+    function start(e) {
+      e.preventDefault();
+
+      prePos.x = e.clientX || e.changedTouches[0].clientX;
+      prePos.y = e.clientY || e.changedTouches[0].clientY;
+      prePos.styleX = ~~(cubeEl.style.transform.match(/rotateX\((.*?)deg\)/)?.[1] ?? 0)
+      prePos.styleY = ~~(cubeEl.style.transform.match(/rotateY\((.*?)deg\)/)?.[1] ?? 0)
+
+      window.addEventListener('mousemove', move);
+    }
+
+    function move(e) {
+      e.preventDefault();
+
+      const disX = ((e.clientX || e.changedTouches[0].clientX) - prePos.x) / 5;
+      const disY = ((e.clientY || e.changedTouches[0].clientY) - prePos.y) / 5;
+
+      // const styleX = prePos.styleX - disY;
+      // const styleY = prePos.styleY + disX; 
+      const styleX = prePos.styleX + disY;
+      const styleY = prePos.styleY - disX;
+
+      cubeEl.style.transform = `rotateX(${styleX}deg) rotateY(${styleY}deg)`
+    }
+  </script>
+</body>
+
+</html>

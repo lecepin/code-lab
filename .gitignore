@@ -1,0 +1,20 @@
+node_modules/
+
+.idea/
+.vscode/
+.theia/
+.recore/
+~*
+package-lock.json
+
+
+# OS generated files #
+######################
+.DS_Store
+.Trash*
+*.swp
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
