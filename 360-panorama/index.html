@@ -51,32 +51,26 @@
     }
 
     .cube-item-pz {
-      transform: rotateY(0deg) translateZ(var(--cube-item-z-distance));
       transform: rotateY(-0deg) translateZ(calc(-1 * var(--cube-item-z-distance)));
     }
 
     .cube-item-px {
-      transform: rotateY(90deg) translateZ(var(--cube-item-z-distance));
       transform: rotateY(-90deg) translateZ(calc(-1 * var(--cube-item-z-distance)));
     }
 
     .cube-item-nz {
-      transform: rotateY(180deg) translateZ(var(--cube-item-z-distance));
       transform: rotateY(-180deg) translateZ(calc(-1 * var(--cube-item-z-distance)));
     }
 
     .cube-item-nx {
-      transform: rotateY(-90deg) translateZ(var(--cube-item-z-distance));
       transform: rotateY(90deg) translateZ(calc(-1 * var(--cube-item-z-distance)));
     }
 
     .cube-item-py {
-      transform: rotateX(90deg) translateZ(var(--cube-item-z-distance));
       transform: rotateX(-90deg) translateZ(calc(-1 * var(--cube-item-z-distance)));
     }
 
     .cube-item-ny {
-      transform: rotateX(-90deg) translateZ(var(--cube-item-z-distance));
       transform: rotateX(90deg) translateZ(calc(-1 * var(--cube-item-z-distance)));
     }
 
@@ -160,8 +154,6 @@
       const disX = ((e.clientX || e.changedTouches[0].clientX) - prePos.x) / 5;
       const disY = ((e.clientY || e.changedTouches[0].clientY) - prePos.y) / 5;
 
-      // const styleX = prePos.styleX - disY;
-      // const styleY = prePos.styleY + disX; 
       const styleX = prePos.styleX + disY;
       const styleY = prePos.styleY - disX;
 
