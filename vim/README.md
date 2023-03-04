@@ -1,0 +1,3 @@
+- https://vim-adventures.com/
+- https://openvim.com/
+- http://www.vimgenius.com/
