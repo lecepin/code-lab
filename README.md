@@ -12,3 +12,4 @@
 - [Vim 游戏](vim)
 - [一张图掌握所有 Console](console)
 - [一张图掌握所有 CSS 选择器](console)
+- [一分钟一键部署 chatGPT](https://github.com/Yidadaa/ChatGPT-Next-Web)
