@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>React 离开动画</title>
+  <style></style>
+  <script crossorigin src="https://g.alicdn.com/code/lib/react/18.2.0/umd/react.production.min.js"></script>
+  <script crossorigin src="https://g.alicdn.com/code/lib/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+  <script crossorigin src="https://gw.alipayobjects.com/os/lib/babel/standalone/7.18.8/babel.min.js"></script>
+  <style>
+    .drawer {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 50%;
+      bottom: 0;
+      background: #fff;
+      box-shadow: 0 0 6px 0px #000;
+      text-align: center;
+    }
+
+    /* 从透明到不透明 & 左侧移动过来 */
+    @keyframes entrying {
+      0% {
+        transform: translate3d(-100%, 0px, 0px);
+      }
+
+      100% {
+        transform: none;
+      }
+    }
+
+    /* 从不透明到透明 & 右侧移动出来 */
+    @keyframes leaving {
+      100% {
+        transform: translate3d(-100%, 0px, 0px);
+      }
+
+      0% {
+        transform: none;
+      }
+    }
+
+    .entry {
+      animation: 1s entrying;
+    }
+
+    .leave {
+      animation: 1s leaving;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app"></div>
+  <script type="text/babel" data-type="module">
+    function useLeaveAnimation(state, duration = 1000) {
+      const [status, setStatus] = React.useState(state ? 'entry' : 'leave');
+      const [show, setShow] = React.useState(state);
+      const timerRef = React.useRef();
+
+      React.useEffect(() => {
+        if (state) {
+          setShow(true);
+          setStatus('entry');
+        } else {
+          setStatus('leave');
+          timerRef.current = setTimeout(() => {
+            setShow(false);
+          }, duration);
+        }
+
+        return () => {
+          clearTimeout(timerRef.current);
+        }
+      }, [state, duration]);
+
+      return { show, status };
+    }
+
+    function App() {
+      const [showDrawer, setShowDrawer] = React.useState(false);
+      const [showDrawer2, setShowDrawer2] = React.useState(false);
+      const leaveAni = useLeaveAnimation(showDrawer, 1000);
+      return <div>
+        <h1>React 离开动画</h1>
+        <button onClick={() => {
+          setShowDrawer(true);
+        }}>打开抽屉-支持离开动画</button>
+        <button onClick={() => {
+          setShowDrawer2(true);
+        }}>打开抽屉-不支持离开动画</button>
+
+        {/*有离开动画*/}
+        {leaveAni.show ?
+          <div className={"drawer " + leaveAni.status}>
+            <h3>抽屉有离开动画</h3>
+            <button onClick={() => {
+              setShowDrawer(false);
+            }}>关闭抽屉</button>
+          </div>
+          : null}
+
+        {/*无离开动画*/}
+        {showDrawer2 ?
+          <div className={"drawer " + (showDrawer2 ? 'entry' : 'leave')}>
+            <h3>抽屉无离开动画</h3>
+            <button onClick={() => {
+              setShowDrawer2(false);
+            }}>关闭抽屉</button>
+          </div>
+          : null}
+      </div>
+    }
+
+    ReactDOM.render(
+      <App />,
+      document.getElementById("app")
+    );
+  </script>
+</body>
+
+</html>

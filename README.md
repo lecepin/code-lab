@@ -14,3 +14,4 @@
 - [一张图掌握所有 CSS 选择器](css-selector)
 - [一分钟一键部署 chatGPT](https://github.com/Yidadaa/ChatGPT-Next-Web)
 - [100天成为CSS大师](100css)
+- [React 离开动画](react-leave-animation)
