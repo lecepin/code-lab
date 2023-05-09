@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>react-transition-group 离开动画</title>
+  <style></style>
+  <script crossorigin src="https://g.alicdn.com/code/lib/react/18.2.0/umd/react.production.min.js"></script>
+  <script crossorigin src="https://g.alicdn.com/code/lib/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+  <script crossorigin
+    src="https://g.alicdn.com/code/lib/react-transition-group/4.4.5/react-transition-group.min.js"></script>
+  <script crossorigin src="https://gw.alipayobjects.com/os/lib/babel/standalone/7.18.8/babel.min.js"></script>
+  <style>
+    .drawer {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 50%;
+      bottom: 0;
+      background: #fff;
+      box-shadow: 0 0 6px 0px #000;
+      text-align: center;
+    }
+
+    /* 从透明到不透明 & 左侧移动过来 */
+    @keyframes entrying {
+      0% {
+        transform: translate3d(-100%, 0px, 0px);
+      }
+
+      100% {
+        transform: none;
+      }
+    }
+
+    /* 从不透明到透明 & 右侧移动出来 */
+    @keyframes leaving {
+      100% {
+        transform: translate3d(-100%, 0px, 0px);
+      }
+
+      0% {
+        transform: none;
+      }
+    }
+
+    .entering {
+      animation: 1s entrying;
+    }
+
+    .exiting {
+      animation: 1s leaving;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app"></div>
+  <script type="text/babel" data-type="module">
+    const { Transition } = ReactTransitionGroup
+
+    function App() {
+      const [showDrawer, setShowDrawer] = React.useState(false);
+      const nodeRef = React.useRef();
+
+      return <div>
+        <h1>react-transition-group 实现</h1>
+        <button onClick={() => {
+          setShowDrawer(true);
+        }}>打开抽屉 </button>
+        <Transition nodeRef={nodeRef} in={showDrawer} timeout={1000} unmountOnExit>
+          {state => <div ref={nodeRef} className={"drawer " + state}>
+            <h3>抽屉有离开动画</h3>
+            <button onClick={() => {
+              setShowDrawer(false);
+            }}>关闭抽屉</button>
+          </div>}
+        </Transition>
+      </div>
+    }
+
+    ReactDOM.render(
+      <App />,
+      document.getElementById("app")
+    );
+  </script>
+</body>
+
+</html>
