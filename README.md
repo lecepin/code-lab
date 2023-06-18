@@ -15,3 +15,4 @@
 - [一分钟一键部署 chatGPT](https://github.com/Yidadaa/ChatGPT-Next-Web)
 - [100天成为CSS大师](100css)
 - [React 离开动画](react-leave-animation)
+- [文本转语音工具](tts-tool)
