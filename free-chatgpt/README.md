@@ -1,0 +1,1 @@
+- [免费 ChatGPT 合集](https://chat-shared.zhile.io/shared.html)
