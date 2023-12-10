@@ -222,7 +222,7 @@ render(
 可用 `&` 来替代当前组件的 className，编译后会被替换：
 
 ```tsx
-onst Thing = styled.div`
+const Thing = styled.div`
   color: blue;
 
   &:hover {
@@ -462,7 +462,7 @@ render(
 动态 CSS 属性名：
 
 ```tsx
-onst EqualDivider = styled.div`
+const EqualDivider = styled.div`
   display: flex;
   margin: 0.5rem;
   padding: 1rem;
@@ -501,7 +501,7 @@ render(
 
 #### 3.3 注意
 
-避免将 styled-compoents 生成的组件放在 render 中：
+避免将 styled-components 生成的组件放在 render 中：
 
 ```tsx
 // 🚫
